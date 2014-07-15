@@ -13,12 +13,12 @@ for show_name in $show_list;
 	do
 
 	#run get_iplayer for each show
-	/usr/bin/get_iplayer --profile-dir /config --get --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/media/SD/Zack/_rename/$show_name"
+	/usr/bin/get_iplayer --profile-dir /config --get --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/media/$show_name"
 
 	if [ -d "$show_name" ]; then
 
 		#run filebot to rename downloaded tv episode
-		filebot -rename "/media/SD/Zack/_rename/$show_name" --action move --format "/media/SD/Zack/{n}/Season {s.pad(2)}/{n} - {s.pad(2)}x{e.pad(2)} - {t}" --db thetvdb --conflict skip --log all
+		filebot -rename "/media/$show_name" --action move --format "/media/{n}/Season {s.pad(2)}/{n} - {s.pad(2)}x{e.pad(2)} - {t}" --db thetvdb --conflict skip --log all
 	fi
 
 done
