@@ -36,6 +36,9 @@ RUN chown -R nobody:users /home/nobody /usr/share/get_iplayer/plugins /usr/bin/g
 # set permissions
 RUN chmod -R 775 /home/nobody /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get_iplayer-script.sh
 
+# set root home dir to allow rwx for all users - required for rtmpdump and filebot
+RUN chmod -R 777 /root
+
 # add conf file
 ###############
 
