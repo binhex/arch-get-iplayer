@@ -22,14 +22,19 @@ VOLUME /config
 # map /media to host defined media path (used to read/write to media library)
 VOLUME /media
 
+# create dirs
+#############
+
+RUN mkdir -p /home/nobody
+
 # set permissions
 #################
 
 # change owner
-RUN chown -R nobody:users /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get_iplayer-script.sh
+RUN chown -R nobody:users /home/nobody /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get_iplayer-script.sh
 
 # set permissions
-RUN chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get_iplayer-script.sh
+RUN chmod -R 775 /home/nobody /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get_iplayer-script.sh
 
 # add conf file
 ###############
