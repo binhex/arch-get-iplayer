@@ -20,19 +20,19 @@ ADD get_iplayer-script.sh /usr/bin/get_iplayer-script.sh
 ################
 
 # add crontab file
-ADD get-iplayer.cron /root/get-iplayer.cron
+ADD get-iplayer.cron /usr/bin/get-iplayer.cron
 
-# load crontab file
-RUN crontab /root/get-iplayer.cron
+# load crontab file as user nobody
+RUN crontab -u nobody /usr/bin/get-iplayer.cron
 
 # set permissions
 #################
 
 # change owner
-RUN chown -R nobody:users /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get_iplayer-script.sh /var/run/crond.pid /root
+RUN chown -R nobody:users /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get-iplayer.cron /usr/bin/get_iplayer-script.sh /root
 
 # set permissions
-RUN chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get_iplayer-script.sh /var/run/crond.pid /root
+RUN chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get-iplayer.cron /usr/bin/get_iplayer-script.sh /root
 
 # cleanup
 #########
@@ -60,5 +60,4 @@ ADD get-iplayer.conf /etc/supervisor/conf.d/get-iplayer.conf
 # run supervisor
 ################
 
-# run supervisor
 CMD ["supervisord", "-c", "/etc/supervisor.conf", "-n"]
