@@ -29,10 +29,10 @@ RUN crontab -u nobody /usr/bin/get-iplayer.cron
 #################
 
 # change owner
-RUN chown -R nobody:users /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get-iplayer.cron /usr/bin/get_iplayer-script.sh /root
+RUN chown -R nobody:users /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get-iplayer.cron /usr/bin/get_iplayer-script.sh /var/run/crond.pid /root
 
 # set permissions
-RUN chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get-iplayer.cron /usr/bin/get_iplayer-script.sh /root
+RUN chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get-iplayer.cron /usr/bin/get_iplayer-script.sh /var/run/crond.pid /root
 
 # cleanup
 #########
