@@ -7,28 +7,32 @@ MAINTAINER binhex
 # update package databases for arch
 RUN pacman -Sy --noconfirm
 
+# install any pre-reqs for application
+RUN pacman -S cronie --noconfirm
+
 # run packer to install application
 RUN packer -S rtmpdump flvstreamer get_iplayer filebot --noconfirm
 
 # add in custom script for shows
 ADD get_iplayer-script.sh /usr/bin/get_iplayer-script.sh
 
-# create dirs
-#############
+# create cronjob
+################
 
-RUN mkdir -p /home/nobody
+# add crontab file
+ADD get-iplayer.cron /root/get-iplayer.cron
+
+# load crontab file
+RUN crontab /root/get-iplayer.cron
 
 # set permissions
 #################
 
 # change owner
-RUN chown -R nobody:users /home/nobody /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get_iplayer-script.sh
+RUN chown -R nobody:users /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get_iplayer-script.sh /root
 
 # set permissions
-RUN chmod -R 775 /home/nobody /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get_iplayer-script.sh
-
-# set root home dir to allow rwx for all users - required for rtmpdump and filebot
-RUN chmod -R 777 /root
+RUN chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get_iplayer-script.sh /root
 
 # cleanup
 #########
@@ -42,16 +46,19 @@ RUN rm -rf /tmp/*
 # docker settings
 #################
 
-# set user to nobody
-USER nobody
-
 # map /config to host defined config path (used to store configuration from app)
 VOLUME /config
 
 # map /media to host defined media path (used to read/write to media library)
 VOLUME /media
 
-# run process
-#############
+# add supervisor conf file
+##########################
 
-CMD ["/usr/bin/get_iplayer-script.sh"]
+ADD get-iplayer.conf /etc/supervisor/conf.d/get-iplayer.conf
+
+# run supervisor
+################
+
+# run supervisor
+CMD ["supervisord", "-c", "/etc/supervisor.conf", "-n"]
