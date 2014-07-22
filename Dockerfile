@@ -22,7 +22,7 @@ ADD get_iplayer-script.sh /usr/bin/get_iplayer-script.sh
 # add crontab file
 ADD get-iplayer.cron /usr/bin/get-iplayer.cron
 
-# load crontab file as user nobody
+# load crontab file for user nobody
 RUN crontab -u nobody /usr/bin/get-iplayer.cron
 
 # set permissions
