@@ -16,6 +16,9 @@ RUN packer -S rtmpdump flvstreamer get_iplayer filebot --noconfirm
 # add in custom script for shows
 ADD get_iplayer-script.sh /usr/bin/get_iplayer-script.sh
 
+# make custom script executable
+RUN chmod +x /usr/bin/get_iplayer-script.sh
+
 # create cronjob
 ################
 
@@ -29,10 +32,10 @@ RUN crontab -u nobody /usr/bin/get-iplayer.cron
 #################
 
 # change owner
-RUN chown -R nobody:users /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get-iplayer.cron /usr/bin/get_iplayer-script.sh /var/run/ /root/
+RUN chown -R nobody:users /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /root/
 
 # set permissions
-RUN chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /usr/bin/get-iplayer.cron /usr/bin/get_iplayer-script.sh /var/run/ /root/
+RUN chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /root/
 
 # cleanup
 #########
