@@ -14,10 +14,10 @@ RUN pacman -S cronie --noconfirm
 RUN packer -S rtmpdump flvstreamer get_iplayer --noconfirm
 
 # add in custom script for shows
-ADD get_iplayer-script.sh /usr/bin/get_iplayer-script.sh
+ADD get-iplayer-script.sh /usr/bin/get-iplayer-script.sh
 
 # make custom script executable
-RUN chmod +x /usr/bin/get_iplayer-script.sh
+RUN chmod +x /usr/bin/get-iplayer-script.sh
 
 # create cronjob
 ################
