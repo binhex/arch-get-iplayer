@@ -1,10 +1,9 @@
-get_iplayer & FileBot
-=====================
+get_iplayer
+===========
 
 get_iplayer - http://www.infradead.org/get_iplayer/html/get_iplayer.html
-FileBot - http://www.filebot.net
 
-Latest stable get_iplayer and FileBot releases from Arch Linux AUR using Packer to compile.
+Latest stable get_iplayer releases from Arch Linux AUR using Packer to compile.
 
 **Pull image**
 

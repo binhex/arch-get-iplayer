@@ -11,7 +11,7 @@ RUN pacman -Sy --noconfirm
 RUN pacman -S cronie --noconfirm
 
 # run packer to install application
-RUN packer -S rtmpdump flvstreamer get_iplayer filebot --noconfirm
+RUN packer -S rtmpdump flvstreamer get_iplayer --noconfirm
 
 # add in custom script for shows
 ADD get_iplayer-script.sh /usr/bin/get_iplayer-script.sh
