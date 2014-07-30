@@ -15,7 +15,7 @@ else
 	echo "#!/bin/bash" >> /config/showlist
 	echo "" >> /config/showlist
 	echo "# the list of shows to download" >> /config/showlist
-	echo "SHOWLIST=" >> /config/showlist
+	echo "SHOWLIST=\"\"" >> /config/showlist
 	
 fi
 
@@ -27,7 +27,7 @@ if [ ${SHOWLIST:+x} ]
 
 	then echo "TV show list defined as ($SHOWLIST), looping over list..."
 	
-	else echo "TV show list is not defined and/or is blank, please specify using the run command for the docker using the -e flag, see docker site for details"
+	else echo "TV show list is not defined and/or is blank, please specify shows to download in the /config/showlist file"
 	
 fi
 
