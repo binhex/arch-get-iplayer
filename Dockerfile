@@ -7,9 +7,6 @@ MAINTAINER binhex
 # update package databases for arch
 RUN pacman -Sy --noconfirm
 
-# install any pre-reqs for application
-RUN pacman -S cronie --noconfirm
-
 # run packer to install application
 RUN packer -S rtmpdump flvstreamer get_iplayer --noconfirm
 
@@ -18,15 +15,6 @@ ADD get-iplayer-script.sh /usr/bin/get-iplayer-script.sh
 
 # make custom script executable
 RUN chmod +x /usr/bin/get-iplayer-script.sh
-
-# create cronjob
-################
-
-# add crontab file
-ADD get-iplayer.cron /usr/bin/get-iplayer.cron
-
-# load crontab file for user nobody
-RUN crontab -u nobody /usr/bin/get-iplayer.cron
 
 # set permissions
 #################

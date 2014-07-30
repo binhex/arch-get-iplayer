@@ -4,7 +4,25 @@
 #set the input field separator
 IFS=','
 
-#check to make sure env set and is not empty - defined via run command
+# check if showlist file exists on /config, if not create blank showlist
+if [ -f "/config/showlist" ]; then
+
+	echo "showlist exists"
+	
+else
+	
+	# create blank showlist file on /config
+	echo "#!/bin/bash" >> /config/showlist
+	echo "" >> /config/showlist
+	echo "# the list of shows to download" >> /config/showlist
+	echo "SHOWLIST=" >> /config/showlist
+	
+fi
+
+# import showlists from file - sets environment variable
+test -f /config/showlist && . /config/showlist
+
+#check to make sure env set and is not empty
 if [ ${SHOWLIST:+x} ]
 
 	then echo "TV show list defined as ($SHOWLIST), looping over list..."
