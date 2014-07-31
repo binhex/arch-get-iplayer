@@ -8,7 +8,7 @@ MAINTAINER binhex
 RUN pacman -Sy --noconfirm
 
 # run packer to install application
-RUN packer -S rtmpdump flvstreamer get_iplayer --noconfirm
+RUN packer -S rtmpdump-ksv-git flvstreamer get_iplayer --noconfirm
 
 # add in custom script for shows
 ADD get-iplayer-script.sh /usr/bin/get-iplayer-script.sh

@@ -37,7 +37,7 @@ for show_name in $SHOWLIST;
 	do
 	
 	#delete any partial files
-	rm -rf "/media/$show_name/*partial*"
+	rm -rf "/data/$show_name/*partial*"
 	
 	#run get_iplayer for each show
 	/usr/bin/get_iplayer --profile-dir /config --get --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/data/$show_name"
