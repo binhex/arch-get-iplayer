@@ -31,7 +31,7 @@ if [ ${SHOWLIST:+x} ]
 	
 fi
 
-#loop over list of shows - show list set via env variable in run command
+#loop over list of shows - show list set via env variable from showlist file
 for show_name in $SHOWLIST;
 
 	do
@@ -40,6 +40,6 @@ for show_name in $SHOWLIST;
 	rm -rf "/media/$show_name/*partial*"
 	
 	#run get_iplayer for each show
-	/usr/bin/get_iplayer --profile-dir /config --get --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/media/$show_name"
+	/usr/bin/get_iplayer --profile-dir /config --get --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/data/$show_name"
 	
 done

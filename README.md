@@ -14,7 +14,7 @@ docker pull binhex/arch-get-iplayer
 **Run container**
 
 ```
-docker run -d --name=<container name> -v <path for media files>:/media -v <path for config files>:/config -v /etc/localtime:/etc/localtime:ro binhex/arch-get-iplayer
+docker run -d --name=<container name> -v <path for output files>:/data -v <path for config files>:/config -v /etc/localtime:/etc/localtime:ro binhex/arch-get-iplayer
 ```
 
 Please replace all user variables in the above command defined by <> with the correct values.
