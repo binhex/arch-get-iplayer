@@ -1,11 +1,20 @@
 FROM binhex/arch-base:test
 MAINTAINER binhex
 
-# packer install
-################
+# additional files
+##################
 
 # download packer from aur
 ADD https://aur.archlinux.org/packages/pa/packer/packer.tar.gz /root/packer.tar.gz
+
+# add in custom script for shows
+ADD get-iplayer-script.sh /usr/bin/get-iplayer-script.sh
+
+# add supervisor conf file for app
+ADD get-iplayer.conf /etc/supervisor/conf.d/get-iplayer.conf
+
+# install packer
+################
 
 # install base devel, compile packer and install, clean cache, root and tmp folders
 RUN pacman -S --needed base-devel --noconfirm && \
@@ -33,15 +42,6 @@ VOLUME /config
 
 # map /data to host defined data path (used to store data from app)
 VOLUME /data
-
-# additional files
-##################
-
-# add in custom script for shows
-ADD get-iplayer-script.sh /usr/bin/get-iplayer-script.sh
-
-# add supervisor conf file for app
-ADD get-iplayer.conf /etc/supervisor/conf.d/get-iplayer.conf
 
 # run supervisor
 ################
