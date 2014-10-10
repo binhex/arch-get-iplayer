@@ -1,41 +1,29 @@
-FROM binhex/arch-base:2014100603
+FROM binhex/arch-base:test
 MAINTAINER binhex
 
-# install application
-#####################
+# packer install
+################
 
-# update package databases for arch
-RUN pacman -Sy --noconfirm
+# download packer from aur
+ADD https://aur.archlinux.org/packages/pa/packer/packer.tar.gz /root/packer.tar.gz
 
-# run packer to install application
-RUN packer -S rtmpdump-ksv-git flvstreamer get_iplayer --noconfirm
-
-# add in custom script for shows
-ADD get-iplayer-script.sh /usr/bin/get-iplayer-script.sh
-
-# make custom script executable
-RUN chmod +x /usr/bin/get-iplayer-script.sh
-
-# set permissions
-#################
-
-# change owner
-RUN chown -R nobody:users /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /root/
-
-# set permissions
-RUN chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /root/
-
-# cleanup
-#########
-
-# remove unneeded apps from base-devel group - used for AUR package compilation
-RUN pacman -Ru base-devel --noconfirm
-
-# completely empty pacman cache folder
-RUN pacman -Scc --noconfirm
-
-# remove temporary files
-RUN rm -rf /tmp/*
+# install base devel, compile packer and install, clean cache, root and tmp folders
+RUN pacman -S --needed base-devel --noconfirm && \
+	cd /root && \
+	tar -xzf packer.tar.gz && \
+	cd /root/packer && \
+	makepkg -s --asroot --noconfirm && \
+	pacman -U /root/packer/packer*.tar.xz --noconfirm && \
+	packer -S rtmpdump-ksv-git flvstreamer get_iplayer --noconfirm && \
+	pacman -Ru base-devel --noconfirm && \
+	pacman -Scc --noconfirm && \	
+	chmod +x /usr/bin/get-iplayer-script.sh && \
+	chown -R nobody:users /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /root/ && \
+	chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /root/	&& \	
+	rm -rf /archlinux/usr/share/locale && \
+	rm -rf /archlinux/usr/share/man && \
+	rm -rf /root/* && \
+	rm -rf /tmp/*
 
 # docker settings
 #################
@@ -46,9 +34,13 @@ VOLUME /config
 # map /data to host defined data path (used to store data from app)
 VOLUME /data
 
-# add supervisor conf file
-##########################
+# additional files
+##################
 
+# add in custom script for shows
+ADD get-iplayer-script.sh /usr/bin/get-iplayer-script.sh
+
+# add supervisor conf file for app
 ADD get-iplayer.conf /etc/supervisor/conf.d/get-iplayer.conf
 
 # run supervisor
