@@ -1,4 +1,4 @@
-FROM binhex/arch-base:test
+FROM binhex/arch-base:2014101300
 MAINTAINER binhex
 
 # additional files
@@ -7,7 +7,7 @@ MAINTAINER binhex
 # download packer from aur
 ADD https://aur.archlinux.org/packages/pa/packer/packer.tar.gz /root/packer.tar.gz
 
-# add in custom script for shows
+# add in custom script
 ADD get-iplayer-script.sh /usr/bin/get-iplayer-script.sh
 
 # add supervisor conf file for app
@@ -16,8 +16,9 @@ ADD get-iplayer.conf /etc/supervisor/conf.d/get-iplayer.conf
 # install packer
 ################
 
-# install base devel, compile packer and install, clean cache, root and tmp folders
-RUN pacman -S --needed base-devel --noconfirm && \
+# install base devel, install app using packer, set perms, cleanup
+RUN pacman -Sy --noconfirm && \
+	pacman -S --needed base-devel --noconfirm && \
 	cd /root && \
 	tar -xzf packer.tar.gz && \
 	cd /root/packer && \
