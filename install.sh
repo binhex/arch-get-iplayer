@@ -7,9 +7,9 @@ pacman -Sy --noconfirm
 source /root/packer.sh
 
 # set permissions
-chmod +x /usr/bin/get-iplayer-script.sh
-chown -R nobody:users /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /root/
-chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /root/	
+chmod +x /home/nobody/start.sh
+chown -R nobody:users /usr/share/get_iplayer/plugins /usr/bin/get_iplayer
+chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer
 
 # cleanup
 yes|pacman -Scc

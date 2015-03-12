@@ -4,9 +4,6 @@ MAINTAINER binhex
 # additional files
 ##################
 
-# add in custom script
-ADD get-iplayer-script.sh /usr/bin/get-iplayer-script.sh
-
 # add supervisor conf file for app
 ADD get-iplayer.conf /etc/supervisor/conf.d/get-iplayer.conf
 
@@ -15,6 +12,9 @@ ADD install.sh /root/install.sh
 
 # add packer bash script
 ADD packer.sh /root/packer.sh
+
+# add start bash script
+ADD start.sh /home/nobody/start.sh
 
 # install app
 #############
