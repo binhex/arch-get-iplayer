@@ -5,7 +5,7 @@ MAINTAINER binhex
 ##################
 
 # add supervisor conf file for app
-ADD get-iplayer.conf /etc/supervisor/conf.d/get-iplayer.conf
+ADD *.conf /etc/supervisor/conf.d/
 
 # add install bash script
 ADD install.sh /root/install.sh
@@ -20,7 +20,7 @@ ADD start.sh /home/nobody/start.sh
 #############
 
 # make executable and run bash scripts to install app
-RUN chmod +x /root/install.sh /root/packer.sh && \
+RUN chmod +x /root/*.sh /home/nobody/*.sh && \
 	/bin/bash /root/install.sh
 
 # docker settings
