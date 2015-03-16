@@ -48,6 +48,15 @@ do
 		
 	done
 
-	sleep 12h
+	#if env variable SCHEDULE not defined then use default
+	if [[ -z "${SCHEDULE}" ]]; then
+
+		sleep 12h
+		
+	else
+	
+		sleep $SCHEDULE
+		
+	fi
 	
 done
