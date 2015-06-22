@@ -44,7 +44,7 @@ do
 		rm -rf "/data/$show_name/*partial*"
 		
 		#run get_iplayer for each show
-		/usr/bin/get_iplayer --profile-dir /config --refresh-feeds-tv=schedule --get --nopurge --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/data/$show_name"
+		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/data/$show_name"
 		
 	done
 
