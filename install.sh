@@ -1,7 +1,11 @@
 #!/bin/bash
 
+# define pacman packages
+pacman_packages="perl-xml-simple"
+
 # install pre-reqs
 pacman -Sy --noconfirm
+pacman -S --needed $pacman_packages --noconfirm
 
 # call aur packer script
 source /root/packer.sh
