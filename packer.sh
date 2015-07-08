@@ -31,7 +31,7 @@ pacman -U /home/makepkg-user/packer-color/packer*.tar.xz --noconfirm
 su -c "packer-color -S $packer_packages --noconfirm" - makepkg-user
 
 # remove base devel tools and packer
-pacman -Ru packer-color base-devel git --noconfirm
+pacman -Ru base-devel git --noconfirm
 
 # delete makepkg-user account
 userdel -r makepkg-user
