@@ -7,7 +7,7 @@ set -e
 pacman_packages="base-devel"
 
 # define packer packages
-packer_packages="rtmpdump-ksv-git flvstreamer get_iplayer"
+packer_packages="rtmpdump-git flvstreamer get_iplayer"
 
 # install required pre-reqs for makepkg
 pacman -S --needed $pacman_packages --noconfirm
@@ -19,7 +19,7 @@ echo "%wheel      ALL=(ALL) ALL" >> /etc/sudoers
 echo "Defaults:makepkg-user      !authenticate" >> /etc/sudoers
 
 # download packer
-curl -o /home/makepkg-user/packer-color.tar.gz https://aur.archlinux.org/packages/pa/packer-color/packer-color.tar.gz
+curl -o /home/makepkg-user/packer-color.tar.gz https://aur.archlinux.org/cgit/aur.git/snapshot/packer-color.tar.gz
 cd /home/makepkg-user
 su -c "tar -xvf packer-color.tar.gz" - makepkg-user
 
