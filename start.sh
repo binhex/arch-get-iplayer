@@ -31,6 +31,10 @@ do
 		# if downloaded file doesnt contain partial then move to completed else delete
 		if ! ls /data/get_iplayer/incomplete/$show_name/*partial* 1> /dev/null 2>&1; then
 
+			# make directory for completed downloads
+			mkdir -p /data/completed/$show_name
+			
+			# move to completed if the filename doesn't contain "partial"
 			mv /data/get_iplayer/incomplete/$show_name/*partial* /data/completed/$show_name/*partial*
 
 		else
