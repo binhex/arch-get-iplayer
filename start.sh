@@ -12,7 +12,10 @@ else
 
 fi
 
-# make directory for incomplete downloads
+# set umask to 000 (permissions octal is then 777)
+umask 000
+
+# make folder for incomplete downloads
 mkdir -p "/data/get_iplayer/incomplete"
 
 # split comma seperated string into list from SHOW env variable
@@ -38,7 +41,7 @@ do
 
 				echo "Creating folder in completed folder for show $show_name..."
 
-				# make directory for completed downloads
+				# make folder for completed downloads
 				mkdir -p "/data/completed/$show_name"
 
 				cd "/data/get_iplayer/incomplete/$show_name"
