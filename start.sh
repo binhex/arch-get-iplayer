@@ -1,62 +1,52 @@
 #!/bin/bash
 # Script to download bbc iplayer tv series
 
-#set the input field separator
-IFS=','
+# if SHOWS env var not defined then exit
+if [[ -z "${SHOWS}" ]]; then
 
-# check if showlist file exists on /config, if not create blank showlist
-if [ -f "/config/showlist" ]; then
-
-	echo "showlist exists"
+	echo "TV show list is not defined and/or is blank, please specify shows to download using the environment variable SHOWS"
 	
 else
-	
-	# create blank showlist file on /config
-	echo "#!/bin/bash" >> /config/showlist
-	echo "" >> /config/showlist
-	echo "# the list of shows to download" >> /config/showlist
-	echo "SHOWLIST=\"\"" >> /config/showlist
+
+	echo "TV shows defined as ${SHOWS}"
 	
 fi
 
-# import showlists from file - sets environment variable
-test -f /config/showlist && . /config/showlist
+# split comma seperated string into list from SHOW env variable
+IFS=',' read -ra SHOWLIST <<< "$SHOWS"
 
-#check to make sure env set and is not empty
-if [ ${SHOWLIST:+x} ]
-
-	then echo "TV show list defined as ($SHOWLIST), looping over list..."
-	
-	else echo "TV show list is not defined and/or is blank, please specify shows to download in the /config/showlist file"
-	
-fi
-
-# re-run command every 12 hours
+# re-run check for new episodes for all series
 while true
 do
 
-	#loop over list of shows - show list set via env variable from showlist file
-	for show_name in $SHOWLIST;
+	# loop over list of shows - SHOWS set via env variable
+	for show_name in "${SHOWLIST[@]}"; do
 
-		do
-		
-		#delete any partial files
-		rm -rf "/data/$show_name/*partial*"
-		
-		#run get_iplayer for each show
-		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/data/$show_name"
-		
+		# run get_iplayer for each show
+		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/data/incomplete/$show_name"
+
+		# if downloaded file doesnt contain partial then move to completed else delete
+		if ! ls /data/incomplete/$show_name/*partial* 1> /dev/null 2>&1; then
+
+			mv /data/incomplete/$show_name/*partial* /data/completed/$show_name/*partial*
+
+		else
+
+			rm -rf /data/incomplete/$show_name/*partial*
+
+		fi
+
 	done
 
-	#if env variable SCHEDULE not defined then use default
+	# if env variable SCHEDULE not defined then use default
 	if [[ -z "${SCHEDULE}" ]]; then
 
 		sleep 12h
-		
+
 	else
-	
+
 		sleep $SCHEDULE
-		
+
 	fi
-	
+
 done
