@@ -25,6 +25,8 @@ do
 	# loop over list of shows - SHOWS set via env variable
 	for show_name in "${SHOWLIST[@]}"; do
 
+		echo "Processing show $(show_name}..."
+
 		# run get_get_iplayer for each show
 		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/data/get_iplayer/incomplete/$show_name"
 
@@ -33,7 +35,7 @@ do
 
 			# make directory for completed downloads
 			mkdir -p /data/completed/$show_name
-			
+
 			# move to completed if the filename doesn't contain "partial"
 			mv /data/get_iplayer/incomplete/$show_name/*partial* /data/completed/$show_name/*partial*
 
