@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script to download bbc iplayer tv series
+# Script to download tv shows from BBC iPlayer
 
 # if SHOWS env var not defined then exit
 if [[ -z "${SHOWS}" ]]; then
@@ -12,6 +12,9 @@ else
 	
 fi
 
+# make directory for incomplete downloads
+mkdir -p /data/get_iplayer/incomplete
+
 # split comma seperated string into list from SHOW env variable
 IFS=',' read -ra SHOWLIST <<< "$SHOWS"
 
@@ -22,17 +25,17 @@ do
 	# loop over list of shows - SHOWS set via env variable
 	for show_name in "${SHOWLIST[@]}"; do
 
-		# run get_iplayer for each show
-		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/data/incomplete/$show_name"
+		# run get_get_iplayer for each show
+		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/data/get_iplayer/incomplete/$show_name"
 
 		# if downloaded file doesnt contain partial then move to completed else delete
-		if ! ls /data/incomplete/$show_name/*partial* 1> /dev/null 2>&1; then
+		if ! ls /data/get_iplayer/incomplete/$show_name/*partial* 1> /dev/null 2>&1; then
 
-			mv /data/incomplete/$show_name/*partial* /data/completed/$show_name/*partial*
+			mv /data/get_iplayer/incomplete/$show_name/*partial* /data/completed/$show_name/*partial*
 
 		else
 
-			rm -rf /data/incomplete/$show_name/*partial*
+			rm -rf /data/get_iplayer/incomplete/$show_name/*partial*
 
 		fi
 
