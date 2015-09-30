@@ -13,7 +13,7 @@ else
 fi
 
 # make directory for incomplete downloads
-mkdir -p /data/get_iplayer/incomplete
+mkdir -p "/data/get_iplayer/incomplete"
 
 # split comma seperated string into list from SHOW env variable
 IFS=',' read -ra SHOWLIST <<< "$SHOWS"
@@ -33,13 +33,17 @@ do
 		# if downloaded file doesnt contain partial then move to completed else delete
 		if ! ls /data/get_iplayer/incomplete/$show_name/*partial* 1> /dev/null 2>&1; then
 
+			echo "Moving downloaded episode to completed folder..."
+
 			# make directory for completed downloads
-			mkdir -p /data/completed/$show_name
+			mkdir -p "/data/completed/$show_name"
 
 			# move to completed if the filename doesn't contain "partial"
-			mv /data/get_iplayer/incomplete/$show_name/*partial* /data/completed/$show_name/*partial*
+			mv "/data/get_iplayer/incomplete/$show_name/*partial*" "/data/completed/$show_name/*partial*"
 
 		else
+
+			echo "Deleting partial downloaded episode from incomplete folder..."
 
 			rm -rf /data/get_iplayer/incomplete/$show_name/*partial*
 
