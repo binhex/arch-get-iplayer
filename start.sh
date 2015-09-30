@@ -5,11 +5,11 @@
 if [[ -z "${SHOWS}" ]]; then
 
 	echo "TV show list is not defined and/or is blank, please specify shows to download using the environment variable SHOWS"
-	
+
 else
 
 	echo "TV shows defined as ${SHOWS}"
-	
+
 fi
 
 # make directory for incomplete downloads
@@ -25,32 +25,40 @@ do
 	# loop over list of shows - SHOWS set via env variable
 	for show_name in "${SHOWLIST[@]}"; do
 
-		echo "Processing show $(show_name}..."
+		echo "Processing show ${show_name}..."
 
 		# run get_get_iplayer for each show
 		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/data/get_iplayer/incomplete/$show_name"
 
-		# if downloaded file doesnt contain partial then move to completed else delete
-		if ! ls /data/get_iplayer/incomplete/$show_name/*partial* 1> /dev/null 2>&1; then
+		# check incomplete folder does contain files with flv extension
+		if ls /data/get_iplayer/incomplete/$show_name/*.flv 1> /dev/null 2>&1; then
 
-			echo "Moving downloaded episode to completed folder..."
+			# move files to completed folder that dont contain partial, otherwise delete
+			if ! ls /data/get_iplayer/incomplete/$show_name/*partial* 1> /dev/null 2>&1; then
 
-			# make directory for completed downloads
-			mkdir -p "/data/completed/$show_name"
+				echo "Moving downloaded episode to completed folder..."
 
-			# move to completed if the filename doesn't contain "partial"
-			mv "/data/get_iplayer/incomplete/$show_name/*partial*" "/data/completed/$show_name/*partial*"
+				# make directory for completed downloads
+				mkdir -p "/data/completed/$show_name"
 
-		else
+				# move to completed if the filename doesn't contain "partial"
+				mv "/data/get_iplayer/incomplete/$show_name/"*.flv "/data/completed/$show_name/"
 
-			echo "Deleting partial downloaded episode from incomplete folder..."
+			else
 
-			rm -rf /data/get_iplayer/incomplete/$show_name/*partial*
+				echo "Deleting partial downloaded episode from incomplete folder..."
+
+				rm -rf /data/get_iplayer/incomplete/$show_name/*partial*
+
+			fi
 
 		fi
 
 	done
-
+	
+	# clean up files/folders in incomplete folder
+	rm -rf /data/get_iplayer/incomplete/*
+	
 	# if env variable SCHEDULE not defined then use default
 	if [[ -z "${SCHEDULE}" ]]; then
 
