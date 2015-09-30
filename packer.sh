@@ -7,7 +7,7 @@ set -e
 pacman_packages="base-devel"
 
 # define packer packages
-packer_packages="rtmpdump-git flvstreamer get_iplayer"
+packer_packages="rtmpdump-git flvstreamer get_iplayer-git"
 
 # install required pre-reqs for makepkg
 pacman -S --needed $pacman_packages --noconfirm
