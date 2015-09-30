@@ -36,18 +36,21 @@ do
 			# move files to completed folder that dont contain partial, otherwise delete
 			if ! ls /data/get_iplayer/incomplete/$show_name/*partial* 1> /dev/null 2>&1; then
 
-				echo "Moving downloaded episode to completed folder..."
+				echo "Creating folder in completed folder for show $show_name..."
 
 				# make directory for completed downloads
 				mkdir -p "/data/completed/$show_name"
 
-				# move to completed if the filename doesn't contain "partial"
-				mv "/data/get_iplayer/incomplete/$show_name/"*.flv "/data/completed/$show_name/"
+				cd "/data/get_iplayer/incomplete/$show_name"
+
+				echo "Moving downloaded episode to completed folder..."
+
+				# move to completed folder
+				mv ./*.flv "/data/completed/$show_name/"
 
 			else
 
 				echo "Deleting partial downloaded episode from incomplete folder..."
-
 				rm -rf /data/get_iplayer/incomplete/$show_name/*partial*
 
 			fi
@@ -55,10 +58,7 @@ do
 		fi
 
 	done
-	
-	# clean up files/folders in incomplete folder
-	rm -rf /data/get_iplayer/incomplete/*
-	
+
 	# if env variable SCHEDULE not defined then use default
 	if [[ -z "${SCHEDULE}" ]]; then
 
