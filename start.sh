@@ -12,55 +12,50 @@ else
 
 fi
 
-# set umask to 000 (permissions octal is then 777)
+# set umask to 000 (permissions octal is then 777 for dir, 666 for files)
 umask 000
 
-# make folder for incomplete downloads
-mkdir -p "/data/get_iplayer/incomplete"
-
 # split comma seperated string into list from SHOW env variable
-IFS=',' read -ra SHOWLIST <<< "$SHOWS"
+IFS=',' read -ra SHOWLIST <<< "${SHOWS}"
 
-# re-run check for new episodes for all series
+# loop over list of shows with scheduled sleep period
 while true
 do
 
-	# loop over list of shows - SHOWS set via env variable
+	# make folder for incomplete downloads
+	mkdir -p "/data/get_iplayer/incomplete"
+
+	# make folder for completed downloads
+	mkdir -p "/data/completed"
+
+	# loop over list of shows
 	for show_name in "${SHOWLIST[@]}"; do
 
 		echo "Processing show ${show_name}..."
 
-		# run get_get_iplayer for each show
-		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="$show_name - <senum> - <episodeshort>" "$show_name" --output "/data/get_iplayer/incomplete/$show_name"
+		echo "Delete partial downloads from incomplete folder..."
+		find /data/get_iplayer/incomplete/ -type f -name "*partial*" -delete
+		
+		# run get_iplayer for show, saving to incomplete folder
+		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="${show_name} - <senum> - <episodeshort>" "${show_name}" --output "/data/get_iplayer/incomplete/${show_name}"
 
-		# check incomplete folder does contain files with flv extension
-		if ls /data/get_iplayer/incomplete/$show_name/*.flv 1> /dev/null 2>&1; then
+	done
 
-			# move files to completed folder that dont contain partial, otherwise delete
-			if ! ls /data/get_iplayer/incomplete/$show_name/*partial* 1> /dev/null 2>&1; then
+	# check incomplete folder DOES contain files with flv extension
+	if [[ -n $(find /data/get_iplayer/incomplete/ -name '*.flv') ]]; then
 
-				echo "Creating folder in completed folder for show $show_name..."
+		echo "Copying folders in incomplete folder to completed..."
+		cp -rf "/data/get_iplayer/incomplete"/* "/data/completed/"
 
-				# make folder for completed downloads
-				mkdir -p "/data/completed/$show_name"
+		# if copy succesful then delete show folder in incomplete folder
+		if [[ $? -eq 0 ]]; then
 
-				cd "/data/get_iplayer/incomplete/$show_name"
-
-				echo "Moving downloaded episode to completed folder..."
-
-				# move to completed folder
-				mv ./*.flv "/data/completed/$show_name/"
-
-			else
-
-				echo "Deleting partial downloaded episode from incomplete folder..."
-				rm -rf /data/get_iplayer/incomplete/$show_name/*partial*
-
-			fi
+			echo "Delete folders in incomplete after succesful copy..."
+			rm -rf "/data/get_iplayer/incomplete"/*
 
 		fi
 
-	done
+	fi
 
 	# if env variable SCHEDULE not defined then use default
 	if [[ -z "${SCHEDULE}" ]]; then
@@ -69,7 +64,7 @@ do
 
 	else
 
-		sleep $SCHEDULE
+		sleep ${SCHEDULE}
 
 	fi
 
