@@ -4,7 +4,7 @@
 set -e
 
 # define pacman packages
-pacman_packages="perl-xml-simple"
+pacman_packages="perl-xml-simple perl-cgi"
 
 # install pre-reqs
 pacman -Sy --noconfirm
