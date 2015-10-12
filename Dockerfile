@@ -32,9 +32,6 @@ VOLUME /config
 # map /data to host defined data path (used to store data from app)
 VOLUME /data
 
-# expose port for get_iplayer webui
-EXPOSE 1935
-
 # run supervisor
 ################
 
