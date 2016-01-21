@@ -1,33 +1,47 @@
-get_iplayer
-===========
+**Application**
 
-get_iplayer - http://www.infradead.org/get_iplayer/html/get_iplayer.html
+[get_iplayer](http://www.infradead.org/get_iplayer/html/get_iplayer.html)
 
-Latest stable get_iplayer releases from Arch Linux AUR using Packer to compile.
+**Application description**
 
-**Pull image**
+get_iplayer has PVR-like capabilities (like Sky+ / TiVo / Series-Link); You can save lists of programme searches which are automatically recorded when they become available so that you can watch them when you choose and on devices that cannot run Adobe Flash Player – even if you don’t have adequate broadband speeds or if your broadband streams too slowly at peak hours when you want to watch a programme.
 
+**Build notes**
+
+Latest stable get_iplayer release from Arch Linux AUR using Packer to compile.
+
+**Usage**
 ```
-docker pull binhex/arch-get-iplayer
-```
-
-**Run container**
-
-```
-docker run -d --name=<container name> -e SCHEDULE="<>" -e SHOWS="<show name(s)>" -v <path for output files>:/data -v <path for config files>:/config -v /etc/localtime:/etc/localtime:ro binhex/arch-get-iplayer
+docker run -d \
+	--name=<container name> \
+	-e SCHEDULE=<XXd|h|m|s> \
+	-e SHOWS=<comma seperated show names> \
+	-v <path for data files>:/data \
+	-v <path for config files>:/config \
+	-v /etc/localtime:/etc/localtime:ro \
+	binhex/arch-get-iplayer
 ```
 
 Please replace all user variables in the above command defined by <> with the correct values.
 
-**Instructions**
-
-Please specify the shows to download via the Environment Variable "SHOWS" value, if you want to specify more than one then please use a comma to seperate show names e.g. "show1,show2".
-
-Please specify the frequency to check for new shows using the Environment Variable "SCHEDULE" value, where the value is s for seconds, m for minutes, h for hours or d for days, e.g. "12h".
-
-
 **Access application**
 
+N/A, CLI only.
+
+**Example**
 ```
-N/A (headless)
+docker run -d \
+	--name=get_iplayer \
+	-e SCHEDULE=12h \
+	-e SHOWS=Chuggington,Mike the Knight \
+	-v /apps/docker/get_iplayer/downloaded:/data \
+	-v /apps/docker/get_iplayer:/config \
+	-v /etc/localtime:/etc/localtime:ro \
+	binhex/arch-get-iplayer
 ```
+
+**Notes**
+
+N/A
+
+[Support forum](http://lime-technology.com/forum/index.php?topic=38055.0)
