@@ -5,16 +5,16 @@ MAINTAINER binhex
 ##################
 
 # add supervisor conf file for app
-ADD *.conf /etc/supervisor/conf.d/
+ADD setup/*.conf /etc/supervisor/conf.d/
 
 # add install bash script
-ADD install.sh /root/install.sh
+ADD setup/install.sh /root/install.sh
 
 # add packer bash script
-ADD packer.sh /root/packer.sh
+ADD setup/packer.sh /root/packer.sh
 
 # add start bash script
-ADD start.sh /home/nobody/start.sh
+ADD setup/start.sh /home/nobody/start.sh
 
 # install app
 #############
@@ -32,7 +32,8 @@ VOLUME /config
 # map /data to host defined data path (used to store data from app)
 VOLUME /data
 
-# run supervisor
-################
+# set permissions
+#################
 
-CMD ["supervisord", "-c", "/etc/supervisor.conf", "-n"]
+# run script to set uid, gid and permissions
+CMD ["/bin/bash", "/root/init.sh"]
