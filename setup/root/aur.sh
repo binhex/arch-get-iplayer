@@ -7,13 +7,7 @@ set -e
 aur_helper="packer"
 
 # define aur packages
-aur_packages="rtmpdump-git flvstreamer get_iplayer-git"
-
-# define pacman packages
-pacman_packages="base-devel git"
-
-# install required pre-reqs for makepkg
-pacman -S --needed $pacman_packages --noconfirm
+aur_packages="rtmpdump-git flvstreamer ffmpeg-headless get_iplayer-git"
 
 # create "makepkg-user" user for makepkg
 useradd -m -s /bin/bash makepkg-user

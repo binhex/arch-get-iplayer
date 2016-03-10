@@ -35,7 +35,7 @@ N/A, CLI only.
 docker run -d \
     --name=get_iplayer \
     -e SCHEDULE=12h \
-    -e SHOWS=Chuggington,Mike the Knight \
+    -e SHOWS="Chuggington,Mike the Knight" \
     -v /apps/docker/get_iplayer/downloaded:/data \
     -v /apps/docker/get_iplayer:/config \
     -v /etc/localtime:/etc/localtime:ro \

@@ -4,12 +4,12 @@
 set -e
 
 # define pacman packages
-pacman_packages="perl-xml-simple"
+pacman_packages="base-devel git perl-xml-simple"
 
 # install pre-reqs
 pacman -S --needed $pacman_packages --noconfirm
 
-# call aur script
+# call aur install script (arch user repo)
 source /root/aur.sh
 
 # cleanup
