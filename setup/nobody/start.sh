@@ -33,12 +33,12 @@ do
 
 		# strip whitespace from start and end of show_name
 		show_name=$(echo "${show_name}" | sed -e 's/^[ \t]*//')
-		
+
 		echo "[info] Processing show ${show_name}..."
 
 		echo "[info] Delete partial downloads from incomplete folder..."
 		find /data/get_iplayer/incomplete/ -type f -name "*partial*" -delete
-		
+
 		echo "[info] Running get_iplayer..."
 		# run get_iplayer for show, saving to incomplete folder
 		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=flashhd,flashvhigh,flashhigh,flashstd,flashnormal,flashlow --file-prefix="${show_name} - <senum> - <episodeshort>" "${show_name}" --output "/data/get_iplayer/incomplete/${show_name}"
@@ -56,19 +56,23 @@ do
 
 			echo "[info] Copy succesful, deleting incoomplete folders..."
 			rm -rf "/data/get_iplayer/incomplete"/*
+
 		else
+
 			echo "[error] Copy failed, skipping deletion of show folders in incoomplete folder..."
+
 		fi
 
 	fi
 
 	# if env variable SCHEDULE not defined then use default
 	if [[ -z "${SCHEDULE}" ]]; then
-	
+
 		echo "[info] Env var SCHEDULE not defined, sleeping for 12 hours..."
 		sleep 12h
 
 	else
+
 		echo "[info] Env var SCHEDULE defined, sleeping for ${SCHEDULE}..."
 		sleep "${SCHEDULE}"
 
