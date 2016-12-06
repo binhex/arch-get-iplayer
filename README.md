@@ -8,7 +8,7 @@ get_iplayer has PVR-like capabilities (like Sky+ / TiVo / Series-Link); You can 
 
 **Build notes**
 
-Latest stable get_iplayer release from Arch Linux AUR using Packer to compile.
+Latest stable get_iplayer release from Arch Linux AUR.
 
 **Usage**
 ```

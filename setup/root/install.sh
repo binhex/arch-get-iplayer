@@ -53,8 +53,8 @@ source /root/aur.sh
 # create file with contets of here doc
 cat <<'EOF' > /tmp/permissions_heredoc
 # set permissions inside container
-chown -R "${PUID}":"${PGID}" /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /home/nobody
-chmod -R 775 /usr/share/get_iplayer/plugins /usr/bin/get_iplayer /home/nobody
+chown -R "${PUID}":"${PGID}" /usr/bin/get_iplayer /home/nobody
+chmod -R 775 /usr/bin/get_iplayer /home/nobody
 
 EOF
 
