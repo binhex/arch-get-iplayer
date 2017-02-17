@@ -45,8 +45,8 @@ do
 
 	done
 
-	# check incomplete folder DOES contain files with flv extension
-	if [[ -n $(find /data/get_iplayer/incomplete/ -name '*.flv') ]]; then
+	# check incomplete folder DOES contain files with mp4 extension
+	if [[ -n $(find /data/get_iplayer/incomplete/ -name '*.mp4') ]]; then
 
 		echo "[info] Copying show folders in incomplete to completed..."
 		cp -rf "/data/get_iplayer/incomplete"/* "/data/completed/"
