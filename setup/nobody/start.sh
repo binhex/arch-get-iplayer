@@ -12,9 +12,6 @@ else
 
 fi
 
-# set umask to 000 (permissions octal is then 777 for dir, 666 for files)
-umask 000
-
 # split comma seperated string into list from SHOW env variable
 IFS=',' read -ra SHOWLIST <<< "${SHOWS}"
 

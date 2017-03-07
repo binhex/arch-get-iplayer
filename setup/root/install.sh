@@ -38,9 +38,6 @@ source /root/aor.sh
 # aur packages
 ####
 
-# define aur helper
-aur_helper="apacman"
-
 # define aur packages
 aur_packages="rtmpdump-git flvstreamer ffmpeg-headless get_iplayer-git"
 
