@@ -13,13 +13,13 @@ curl --connect-timeout 5 --max-time 10 --retry 5 --retry-delay 0 --retry-max-tim
 unzip /tmp/scripts-master.zip -d /tmp
 
 # move shell scripts to /root
-find /tmp/scripts-master/ -type f -name '*.sh' -exec mv -i {} /root/  \;
+mv /tmp/scripts-master/shell/arch/docker/*.sh /root/
 
 # pacman packages
 ####
 
 # define pacman packages
-pacman_packages="git perl-xml-simple"
+pacman_packages="git perl-xml-simple libx264 libvpx"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
@@ -39,7 +39,7 @@ source /root/aor.sh
 ####
 
 # define aur packages
-aur_packages="rtmpdump-git flvstreamer ffmpeg-headless get_iplayer-git"
+aur_packages="flvstreamer ffmpeg-headless get_iplayer"
 
 # call aur install script (arch user repo)
 source /root/aur.sh
