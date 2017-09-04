@@ -29,7 +29,7 @@ do
 	for show_name in "${SHOWLIST[@]}"; do
 
 		# strip whitespace from start and end of show_name
-		show_name=$(echo "${show_name}" | sed -e 's/^[ \t]*//')
+		show_name=$(echo "${show_name}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 		echo "[info] Processing show ${show_name}..."
 
