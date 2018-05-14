@@ -38,7 +38,7 @@ do
 
 		echo "[info] Running get_iplayer..."
 		# run get_iplayer for show, saving to incomplete folder
-		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=tvbest,radiobest --fps50 --file-prefix="${show_name} - <senum> - <episodeshort>" "${show_name}" --output "/data/get_iplayer/incomplete/${show_name}"
+		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=tvbest,radiobest --file-prefix="${show_name} - <senum> - <episodeshort>" "${show_name}" --output "/data/get_iplayer/incomplete/${show_name}"
 
 	done
 
