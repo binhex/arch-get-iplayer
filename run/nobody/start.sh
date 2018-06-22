@@ -12,7 +12,7 @@ else
 
 fi
 
-# split comma seperated string into list from SHOW env variable
+# split comma separated string into list from SHOW env variable
 IFS=',' read -ra SHOWLIST <<< "${SHOWS}"
 
 # make folder for incomplete downloads
@@ -48,15 +48,15 @@ do
 		echo "[info] Copying show folders in incomplete to completed..."
 		cp -rf "/data/get_iplayer/incomplete"/* "/data/completed/"
 
-		# if copy succesful then delete show folder in incomplete folder
+		# if copy successful then delete show folder in incomplete folder
 		if [[ $? -eq 0 ]]; then
 
-			echo "[info] Copy succesful, deleting incoomplete folders..."
+			echo "[info] Copy successful, deleting incomplete folders..."
 			rm -rf "/data/get_iplayer/incomplete"/*
 
 		else
 
-			echo "[error] Copy failed, skipping deletion of show folders in incoomplete folder..."
+			echo "[error] Copy failed, skipping deletion of show folders in incomplete folder..."
 
 		fi
 
