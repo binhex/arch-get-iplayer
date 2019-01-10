@@ -39,7 +39,7 @@ source /root/aor.sh
 ####
 
 # define aur packages
-aur_packages="flvstreamer perl-mojolicious ^get_iplayer$"
+aur_packages="flvstreamer ^get_iplayer$"
 
 # call aur install script (arch user repo)
 source /root/aur.sh
