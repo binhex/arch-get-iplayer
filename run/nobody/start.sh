@@ -1,13 +1,15 @@
 #!/bin/bash
 # Script to download tv shows from BBC iPlayer
 
-# if SHOWS env var not defined then exit
+# if SHOWS env var not defined then assume pvr mode
 if [[ -z "${SHOWS}" ]]; then
 
-	echo "[crit] TV show list is not defined and/or is blank, please specify shows to download using the environment variable SHOWS"
+	IPLAYER_MODE="PVR"
+	echo "[info] Using PVR files in /config/pvr directory"
 
 else
 
+	IPLAYER_MODE="GET"
 	echo "[info] TV shows defined as ${SHOWS}"
 
 fi
@@ -21,26 +23,40 @@ mkdir -p "/data/get_iplayer/incomplete"
 # make folder for completed downloads
 mkdir -p "/data/completed"
 
+# Set default preferences but allow user to modify in options file
+if [ ! -f /config/options ]; then
+	/usr/bin/get_iplayer --profile-dir /config --prefs-add --nopurge --modes=tvbest,radiobest --file-prefix="<name> - <senum> - <episodeshort>"
+fi
+
 # loop over list of shows with scheduled sleep period
 while true
 do
 
-	# process each show in the list
-	for show_name in "${SHOWLIST[@]}"; do
+	if [[ "$IPLAYER_MODE" = "GET" ]]; then
+		echo "[info] TV shows defined as ${SHOWS}"
 
-		# strip whitespace from start and end of show_name
-		show_name=$(echo "${show_name}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+		# process each show in the list
+		for show_name in "${SHOWLIST[@]}"; do
 
-		echo "[info] Processing show ${show_name}..."
+			# strip whitespace from start and end of show_name
+			show_name=$(echo "${show_name}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-		echo "[info] Delete partial downloads from incomplete folder..."
-		find /data/get_iplayer/incomplete/ -type f -name "*partial*" -delete
+			echo "[info] Processing show ${show_name}..."
 
-		echo "[info] Running get_iplayer..."
-		# run get_iplayer for show, saving to incomplete folder
-		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=tvbest,radiobest --file-prefix="${show_name} - <senum> - <episodeshort>" "${show_name}" --output "/data/get_iplayer/incomplete/${show_name}"
+			echo "[info] Delete partial downloads from incomplete folder..."
+			find /data/get_iplayer/incomplete/ -type f -name "*partial*" -delete
 
-	done
+			echo "[info] Running get_iplayer..."
+			# run get_iplayer for show, saving to incomplete folder
+			/usr/bin/get_iplayer --profile-dir /config --get "${show_name}" --output "/data/get_iplayer/incomplete/" --subdir --subdir-format="<name>"
+
+		done
+	elif [[ "$IPLAYER_MODE" = "PVR" ]]; then
+		echo "[info] Running PVR..."
+
+		/usr/bin/get_iplayer --profile-dir /config --refresh --pvr --output "/data/get_iplayer/incomplete/" --subdir --subdir-format="<name>"
+
+	fi
 
 	# check incomplete folder DOES contain files with mp4 extension
 	if [[ -n $(find /data/get_iplayer/incomplete/ -name '*.mp4') ]]; then
