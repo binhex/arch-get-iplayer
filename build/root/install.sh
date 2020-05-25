@@ -46,7 +46,7 @@ fi
 ####
 
 # define aur packages
-aur_packages="flvstreamer ^get_iplayer$"
+aur_packages="flvstreamer get_iplayer"
 
 # call aur install script (arch user repo)
 source aur.sh
