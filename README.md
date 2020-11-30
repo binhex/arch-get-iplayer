@@ -4,7 +4,7 @@
 
 **Description**
 
-get_iplayer has PVR-like capabilities (like Sky+ / TiVo / Series-Link); You can save lists of programme searches which are automatically recorded when they become available so that you can watch them when you choose and on devices that cannot run Adobe Flash Player – even if you don’t have adequate broadband speeds or if your broadband streams too slowly at peak hours when you want to watch a programme.
+get_iplayer has PVR-like capabilities (like Sky+ / TiVo / Series-Link); You can save lists of program searches which are automatically recorded when they become available so that you can watch them when you choose and on devices that cannot run Adobe Flash Player – even if you don’t have adequate broadband speeds or if your broadband streams too slowly at peak hours when you want to watch a program.
 
 **Build notes**
 
@@ -15,7 +15,8 @@ Latest stable get_iplayer release from Arch Linux AUR.
 docker run -d \
     --name=<container name> \
     -e SCHEDULE=<XXd|h|m|s> \
-    -e SHOWS=<comma seperated show names> \
+    -e SHOWS=<comma separated show names> \
+    -e SHOWS_PID=<comma separated show pid's> \
     -v <path for data files>:/data \
     -v <path for config files>:/config \
     -v /etc/localtime:/etc/localtime:ro \
@@ -37,6 +38,7 @@ docker run -d \
     --name=get_iplayer \
     -e SCHEDULE=12h \
     -e SHOWS="Chuggington,Mike the Knight" \
+    -e SHOWS_PID="b01j9sth,m000ptgr" \
     -v /apps/docker/get_iplayer/downloaded:/data \
     -v /apps/docker/get_iplayer:/config \
     -v /etc/localtime:/etc/localtime:ro \
