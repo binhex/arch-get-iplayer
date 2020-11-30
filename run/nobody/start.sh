@@ -1,46 +1,42 @@
 #!/bin/bash
 # Script to download tv shows from BBC iPlayer
 
-# if SHOWS env var not defined then exit
-if [[ -z "${SHOWS}" ]]; then
+function download() {
 
-	echo "[crit] TV show list is not defined and/or is blank, please specify shows to download using the environment variable SHOWS"
+	shows="${1}"
+	show_type="${2}"
 
-else
+	echo "[info] TV show Name/PID defined as '${shows}'"
 
-	echo "[info] TV shows defined as ${SHOWS}"
-
-fi
-
-# split comma separated string into list from SHOW env variable
-IFS=',' read -ra SHOWLIST <<< "${SHOWS}"
-
-# make folder for incomplete downloads
-mkdir -p "/data/get_iplayer/incomplete"
-
-# make folder for completed downloads
-mkdir -p "/data/completed"
-
-# loop over list of shows with scheduled sleep period
-while true
-do
+	# split comma separated string into list from SHOW env variable
+	IFS=',' read -ra showlist <<< "${shows}"
 
 	# process each show in the list
-	for show_name in "${SHOWLIST[@]}"; do
+	for show in "${showlist[@]}"; do
 
-		# strip whitespace from start and end of show_name
-		show_name=$(echo "${show_name}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+		# strip whitespace from start and end of show
+		show=$(echo "${show}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-		echo "[info] Processing show ${show_name}..."
+		echo "[info] Processing show '${show}'..."
 
-		echo "[info] Delete partial downloads from incomplete folder..."
+		echo "[info] Delete partial downloads from incomplete folder '/data/get_iplayer/incomplete/'..."
 		find /data/get_iplayer/incomplete/ -type f -name "*partial*" -delete
 
-		echo "[info] Running get_iplayer..."
-		# run get_iplayer for show, saving to incomplete folder
-		/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=tvbest,radiobest --file-prefix="${show_name} - <senum> - <episodeshort>" "${show_name}" --output "/data/get_iplayer/incomplete/${show_name}"
+		if [[ "${show_type}" == "name" ]]; then
+
+			/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=tvbest,radiobest --file-prefix="${show} - <senum> - <episodeshort>" "${show}" --output "/data/get_iplayer/incomplete/${show}"
+
+		else
+
+			/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=tvbest,radiobest --file-prefix="${show} - <senum> - <episodeshort>" --pid="${show}" --pid-recursive --output "/data/get_iplayer/incomplete/${show}"
+
+		fi
 
 	done
+
+}
+
+function move() {
 
 	# check incomplete folder DOES contain files with mp4 extension
 	if [[ -n $(find /data/get_iplayer/incomplete/ -name '*.mp4') ]]; then
@@ -62,17 +58,52 @@ do
 
 	fi
 
-	# if env variable SCHEDULE not defined then use default
-	if [[ -z "${SCHEDULE}" ]]; then
+}
 
-		echo "[info] Env var SCHEDULE not defined, sleeping for 12 hours..."
-		sleep 12h
+function start() {
 
-	else
+	# make folder for incomplete downloads
+	mkdir -p "/data/get_iplayer/incomplete"
 
-		echo "[info] Env var SCHEDULE defined, sleeping for ${SCHEDULE}..."
-		sleep "${SCHEDULE}"
+	# make folder for completed downloads
+	mkdir -p "/data/completed"
 
-	fi
+	while true; do
 
-done
+		if [[ -n "${SHOWS}" ]]; then
+			download "${SHOWS}" "name"
+		fi
+
+		if [[ -n "${SHOWS_PID}" ]]; then
+			download "${SHOWS_PID}" "pid"
+		fi
+
+		# run function to move downloaded tv shows
+		move
+
+		# if env variable SCHEDULE not defined then use default
+		if [[ -z "${SCHEDULE}" ]]; then
+
+			echo "[info] Env var SCHEDULE not defined, sleeping for 12 hours..."
+			sleep 12h
+
+		else
+
+			echo "[info] Env var SCHEDULE defined, sleeping for ${SCHEDULE}..."
+			sleep "${SCHEDULE}"
+
+		fi
+
+	done
+
+}
+
+# if SHOWS env var not defined then exit
+if [ -z "${SHOWS}" ] && [ -z "${SHOWS_PID}" ]; then
+
+	echo "[crit] TV Show Name and PID is not defined and/or is blank, please specify shows to download using the environment variable 'SHOWS' and/or 'SHOWS_PID'"
+
+fi
+
+# run function to start processing
+start
