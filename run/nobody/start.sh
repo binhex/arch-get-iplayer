@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/dumb-init /bin/bash
 # Script to download tv shows from BBC iPlayer
 
 function download() {
