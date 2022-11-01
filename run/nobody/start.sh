@@ -24,11 +24,11 @@ function download() {
 
 		if [[ "${show_type}" == "name" ]]; then
 
-			/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=tvbest,radiobest --file-prefix="${show} - <senum> - <episodeshort>" "${show}" --output "/data/get_iplayer/incomplete/${show}"
+			/usr/bin/get_iplayer --profile-dir /config --get --nopurge --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="${show} - <senum> - <episodeshort>" "${show}" --output "/data/get_iplayer/incomplete/${show}"
 
 		else
 
-			/usr/bin/get_iplayer --profile-dir /config --get --nopurge --modes=tvbest,radiobest --file-prefix="${show} - <senum> - <episodeshort>" --pid="${show}" --pid-recursive --output "/data/get_iplayer/incomplete/${show}"
+			/usr/bin/get_iplayer --profile-dir /config --get --nopurge --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="${show} - <senum> - <episodeshort>" --pid="${show}" --pid-recursive --output "/data/get_iplayer/incomplete/${show}"
 
 		fi
 
