@@ -22,6 +22,8 @@ function download() {
 		echo "[info] Delete partial downloads from incomplete folder '/data/get_iplayer/incomplete/'..."
 		find /data/get_iplayer/incomplete/ -type f -name "*partial*" -delete
 
+		# '--tv-quality' option defined as 'fhd' is not included in the default list
+		# '--radio-quality' default does define all bitrates, thus does not require the option to be specified
 		if [[ "${show_type}" == "name" ]]; then
 
 			/usr/bin/get_iplayer --profile-dir /config --get --nopurge --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="${show} - <senum> - <episodeshort>" "${show}" --output "/data/get_iplayer/incomplete/${show}"
@@ -68,6 +70,9 @@ function start() {
 	# make folder for completed downloads
 	mkdir -p "/data/completed"
 
+	# set locations for ffmpeg and atomicparsley
+	/usr/bin/get_iplayer --prefs-add --ffmpeg='/usr/sbin/ffmpeg' --atomicparsley='/usr/sbin/atomicparsley'
+
 	while true; do
 
 		if [[ -n "${SHOWS}" ]]; then
@@ -98,10 +103,10 @@ function start() {
 
 }
 
-# if SHOWS env var not defined then exit
+# if 'SHOWS' env var not defined then exit
 if [ -z "${SHOWS}" ] && [ -z "${SHOWS_PID}" ]; then
 
-	echo "[crit] TV Show Name and PID is not defined and/or is blank, please specify shows to download using the environment variable 'SHOWS' and/or 'SHOWS_PID'"
+	echo "[crit] TV Show Name and/or PID is not defined, please specify show name to download using the environment variable 'SHOWS' and/or specify the show pid using 'SHOWS_PID'"
 
 fi
 
