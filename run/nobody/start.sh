@@ -71,7 +71,7 @@ function start() {
 	mkdir -p "/data/completed"
 
 	# set locations for ffmpeg and atomicparsley
-	/usr/bin/get_iplayer --prefs-add --ffmpeg='/usr/sbin/ffmpeg' --atomicparsley='/usr/sbin/atomicparsley'
+	/usr/bin/get_iplayer --profile-dir /config --prefs-add --ffmpeg='/usr/sbin/ffmpeg' --atomicparsley='/usr/sbin/atomicparsley'
 
 	while true; do
 
