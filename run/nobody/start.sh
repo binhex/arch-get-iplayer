@@ -22,17 +22,14 @@ function download() {
 		echo "[info] Delete partial downloads from incomplete folder '/data/get_iplayer/incomplete/'..."
 		find /data/get_iplayer/incomplete/ -type f -name "*partial*" -delete
 
-		# '--tv-quality' option defined as 'fhd' is not included in the default list
-		# '--radio-quality' default does define all bitrates, thus does not require the option to be specified
+		# if show_type is name then set pid_command to empty string, else use pid (show name as pid)
 		if [[ "${show_type}" == "name" ]]; then
-
-			/usr/bin/get_iplayer --profile-dir /config --get --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="${show} - <senum> - <episodeshort>" "${show}" --output "/data/get_iplayer/incomplete/${show}"
-
+			pid_command=""
 		else
-
-			/usr/bin/get_iplayer --profile-dir /config --get --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="${show} - <senum> - <episodeshort>" --pid="${show}" --pid-recursive --output "/data/get_iplayer/incomplete/${show}"
-
+			pid_command="--pid=${show} --pid-recursive"
 		fi
+
+		/usr/bin/get_iplayer --profile-dir /config --atomicparsley /usr/sbin/atomicparsley --get --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="${show} - <senum> - <episodeshort>" ${pid_command} --output "/data/get_iplayer/incomplete/${show}"
 
 	done
 
