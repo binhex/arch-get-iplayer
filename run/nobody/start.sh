@@ -22,9 +22,9 @@ function download() {
 		echo "[info] Delete partial downloads from incomplete folder '/data/get_iplayer/incomplete/'..."
 		find /data/get_iplayer/incomplete/ -type f -name "*partial*" -delete
 
-		# if show_type is name then set pid_command to empty string, else use pid (show name as pid)
+		# if show_type is name then set pid_command to show name, else use pid (show name as pid)
 		if [[ "${show_type}" == "name" ]]; then
-			pid_command=""
+			pid_command="${show}"
 		else
 			pid_command="--pid=${show} --pid-recursive"
 		fi
