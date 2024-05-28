@@ -24,12 +24,10 @@ function download() {
 
 		# if show_type is name then set pid_command to show name, else use pid (show name as pid)
 		if [[ "${show_type}" == "name" ]]; then
-			pid_command="${show}"
+			/usr/bin/get_iplayer --profile-dir /config --atomicparsley /usr/sbin/atomicparsley --get --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="${show} - <senum> - <episodeshort>" "${show}" --output "/data/get_iplayer/incomplete/${show}"
 		else
-			pid_command="--pid=${show} --pid-recursive"
+			/usr/bin/get_iplayer --profile-dir /config --atomicparsley /usr/sbin/atomicparsley --get --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="${show} - <senum> - <episodeshort>" --pid="${show}" --pid-recursive --output "/data/get_iplayer/incomplete/${show}"
 		fi
-
-		/usr/bin/get_iplayer --profile-dir /config --atomicparsley /usr/sbin/atomicparsley --get --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="${show} - <senum> - <episodeshort>" ${pid_command} --output "/data/get_iplayer/incomplete/${show}"
 
 	done
 
