@@ -3,105 +3,105 @@
 
 function download() {
 
-	shows="${1}"
-	show_type="${2}"
+        shows="${1}"
+        show_type="${2}"
 
-	echo "[info] TV show Name/PID defined as '${shows}'"
+        echo "[info] TV show Name/PID defined as '${shows}'"
 
-	# split comma separated string into list from SHOW env variable
-	IFS=',' read -ra showlist <<< "${shows}"
+        # split comma separated string into list from SHOW env variable
+        IFS=',' read -ra showlist <<< "${shows}"
 
-	# process each show in the list
-	for show in "${showlist[@]}"; do
+        # process each show in the list
+        for show in "${showlist[@]}"; do
 
-		# strip whitespace from start and end of show
-		show=$(echo "${show}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+                # strip whitespace from start and end of show
+                show=$(echo "${show}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
-		echo "[info] Processing show '${show}'..."
+                echo "[info] Processing show '${show}'..."
 
-		echo "[info] Delete partial downloads from incomplete folder '/data/get_iplayer/incomplete/'..."
-		find /data/get_iplayer/incomplete/ -type f -name "*partial*" -delete
+                echo "[info] Delete partial downloads from incomplete folder '/data/get_iplayer/incomplete/'..."
+                find /data/get_iplayer/incomplete/ -type f -name "*partial*" -delete
 
-		# if show_type is name then set pid_command to show name, else use pid (show name as pid)
-		if [[ "${show_type}" == "name" ]]; then
-			/usr/bin/get_iplayer --profile-dir /config --atomicparsley /usr/sbin/atomicparsley --get --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="${show} - <senum> - <episodeshort>" "${show}" --output "/data/get_iplayer/incomplete/${show}"
-		else
-			/usr/bin/get_iplayer --profile-dir /config --atomicparsley /usr/sbin/atomicparsley --get --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="${show} - <senum> - <episodeshort>" --pid="${show}" --pid-recursive --output "/data/get_iplayer/incomplete/${show}"
-		fi
+                # if show_type is name then set pid_command to show name, else use pid (show name as pid)
+                if [[ "${show_type}" == "name" ]]; then
+                        /usr/bin/get_iplayer --profile-dir /config --atomicparsley /usr/sbin/atomicparsley --get --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="${show} - <senum> - <episodeshort>" "${show}" --output "/data/get_iplayer/incomplete/" --subdir --subdir-format="<nameshort>"
+                else
+                        /usr/bin/get_iplayer --profile-dir /config --atomicparsley /usr/sbin/atomicparsley --get --tv-quality="fhd,hd,sd,web,mobile" --file-prefix="<nameshort> - <senum> - <episodeshort>" --pid="${show}" --pid-recursive --output "/data/get_iplayer/incomplete/" --subdir --subdir-format="<nameshort>"
+                fi
 
-	done
+        done
 
 }
 
 function move() {
 
-	# check incomplete folder DOES contain files with mp4 extension
-	if [[ -n $(find /data/get_iplayer/incomplete/ -name '*.mp4') ]]; then
+        # check incomplete folder DOES contain files with mp4 extension
+        if [[ -n $(find /data/get_iplayer/incomplete/ -name '*.mp4') ]]; then
 
-		echo "[info] Copying show folders in incomplete to completed..."
-		cp -rf "/data/get_iplayer/incomplete"/* "/data/completed/"
+                echo "[info] Copying show folders in incomplete to completed..."
+                cp -rf "/data/get_iplayer/incomplete"/* "/data/completed/"
 
-		# if copy successful then delete show folder in incomplete folder
-		if [[ $? -eq 0 ]]; then
+                # if copy successful then delete show folder in incomplete folder
+                if [[ $? -eq 0 ]]; then
 
-			echo "[info] Copy successful, deleting incomplete folders..."
-			rm -rf "/data/get_iplayer/incomplete"/*
+                        echo "[info] Copy successful, deleting incomplete folders..."
+                        rm -rf "/data/get_iplayer/incomplete"/*
 
-		else
+                else
 
-			echo "[error] Copy failed, skipping deletion of show folders in incomplete folder..."
+                        echo "[error] Copy failed, skipping deletion of show folders in incomplete folder..."
 
-		fi
+                fi
 
-	fi
+        fi
 
 }
 
 function start() {
 
-	# make folder for incomplete downloads
-	mkdir -p "/data/get_iplayer/incomplete"
+        # make folder for incomplete downloads
+        mkdir -p "/data/get_iplayer/incomplete"
 
-	# make folder for completed downloads
-	mkdir -p "/data/completed"
+        # make folder for completed downloads
+        mkdir -p "/data/completed"
 
-	# set locations for ffmpeg and atomicparsley
-	/usr/bin/get_iplayer --profile-dir /config --prefs-add --ffmpeg='/usr/sbin/ffmpeg' --atomicparsley='/usr/sbin/atomicparsley'
+        # set locations for ffmpeg and atomicparsley
+        /usr/bin/get_iplayer --profile-dir /config --prefs-add --ffmpeg='/usr/sbin/ffmpeg' --atomicparsley='/usr/sbin/atomicparsley'
 
-	while true; do
+        while true; do
 
-		if [[ -n "${SHOWS}" ]]; then
-			download "${SHOWS}" "name"
-		fi
+                if [[ -n "${SHOWS}" ]]; then
+                        download "${SHOWS}" "name"
+                fi
 
-		if [[ -n "${SHOWS_PID}" ]]; then
-			download "${SHOWS_PID}" "pid"
-		fi
+                if [[ -n "${SHOWS_PID}" ]]; then
+                        download "${SHOWS_PID}" "pid"
+                fi
 
-		# run function to move downloaded tv shows
-		move
+                # run function to move downloaded tv shows
+                move
 
-		# if env variable SCHEDULE not defined then use default
-		if [[ -z "${SCHEDULE}" ]]; then
+                # if env variable SCHEDULE not defined then use default
+                if [[ -z "${SCHEDULE}" ]]; then
 
-			echo "[info] Env var SCHEDULE not defined, sleeping for 12 hours..."
-			sleep 12h
+                        echo "[info] Env var SCHEDULE not defined, sleeping for 12 hours..."
+                        sleep 12h
 
-		else
+                else
 
-			echo "[info] Env var SCHEDULE defined, sleeping for ${SCHEDULE}..."
-			sleep "${SCHEDULE}"
+                        echo "[info] Env var SCHEDULE defined, sleeping for ${SCHEDULE}..."
+                        sleep "${SCHEDULE}"
 
-		fi
+                fi
 
-	done
+        done
 
 }
 
 # if 'SHOWS' env var not defined then exit
 if [ -z "${SHOWS}" ] && [ -z "${SHOWS_PID}" ]; then
 
-	echo "[crit] TV Show Name and/or PID is not defined, please specify show name to download using the environment variable 'SHOWS' and/or specify the show pid using 'SHOWS_PID'"
+        echo "[crit] TV Show Name and/or PID is not defined, please specify show name to download using the environment variable 'SHOWS' and/or specify the show pid using 'SHOWS_PID'"
 
 fi
 
