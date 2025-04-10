@@ -15,8 +15,10 @@ Latest stable get_iplayer release from Arch Linux AUR.
 docker run -d \
     --name=<container name> \
     -e SCHEDULE=<XXd|h|m|s> \
-    -e SHOWS=<comma separated show names> \
-    -e SHOWS_PID=<comma separated show pid's> \
+    -e VIDEO_SHOWS_NAME=<comma separated show names> \
+    -e VIDEO_SHOWS_PID=<comma separated show pid's> \
+    -e AUDIO_SHOWS_NAME=<comma separated show names> \
+    -e AUDIO_SHOWS_PID=<comma separated show pid's> \
     -v <path for data files>:/data \
     -v <path for config files>:/config \
     -v /etc/localtime:/etc/localtime:ro \
@@ -37,8 +39,8 @@ N/A, CLI only.
 docker run -d \
     --name=get_iplayer \
     -e SCHEDULE=12h \
-    -e SHOWS="Chuggington,Mike the Knight" \
-    -e SHOWS_PID="b01j9sth,m000ptgr" \
+    -e VIDEO_SHOWS_NAME="Chuggington,Mike the Knight" \
+    -e VIDEO_SHOWS_PID="b01j9sth,m000ptgr" \
     -v /apps/docker/get_iplayer/downloaded:/data \
     -v /apps/docker/get_iplayer:/config \
     -v /etc/localtime:/etc/localtime:ro \
