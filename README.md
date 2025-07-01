@@ -19,7 +19,6 @@ Latest stable get_iplayer release from Arch Linux AUR.
 
 ```bash
 docker run -d \
-
     --name=<container name> \
     -e SCHEDULE=<XXd|h|m|s> \
     -e VIDEO_SHOWS_NAME=<comma separated show names> \
@@ -32,9 +31,7 @@ docker run -d \
     -e UMASK=<umask for created files> \
     -e PUID=<uid for user> \
     -e PGID=<gid for user> \
-
     binhex/arch-get-iplayer
-
 ```
 
 Please replace all user variables in the above command defined by <> with the
@@ -48,7 +45,6 @@ N/A, CLI only.
 
 ```bash
 docker run -d \
-
     --name=get_iplayer \
     -e SCHEDULE=12h \
     -e VIDEO_SHOWS_NAME="Chuggington,Mike the Knight" \
@@ -59,9 +55,7 @@ docker run -d \
     -e UMASK=000 \
     -e PUID=0 \
     -e PGID=0 \
-
     binhex/arch-get-iplayer
-
 ```
 
 ## Notes
@@ -71,7 +65,6 @@ for the user you want to run the container as:-
 
 ```bash
 id <username>
-
 ```
 
 ___
