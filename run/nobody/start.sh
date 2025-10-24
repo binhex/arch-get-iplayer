@@ -36,7 +36,7 @@ function get_iplayer() {
 
   # Set common commands
   local common_start_array=("${GET_IPLAYER_FILEPATH}" "--profile-dir" "/config" "--atomicparsley" "${ATOMIC_PARSELY_FILEPATH}")
-  local common_end_array=("--file-prefix=<nameshort> - <senum> - <episodeshort>" "--subdir" "--subdir-format=<nameshort>" "--output" "${INCOMPLETE_PATH}")
+  local common_end_array=("--file-prefix=<nameshort> - <senum> - <episodeshort>" "--subdir" "--subdir-format=<nameshort>" "--output" "${INCOMPLETE_DOWNLOADS_PATH}")
 
   # Initialize the command array
   local cmd=("${common_start_array[@]}")
@@ -86,16 +86,16 @@ function move_completed() {
   local show_name="${1}"
   shift
 
-  if [[ -n $(find "${INCOMPLETE_PATH}" -name '*.m??') ]]; then
+  if [[ -n $(find "${INCOMPLETE_DOWNLOADS_PATH}" -name '*.m??') ]]; then
 
-    echo "[info] Copying completed files for show '${show_name}' to completed folder '${COMPLETED_PATH}'..."
+    echo "[info] Copying completed files for show '${show_name}' to completed folder '${COMPLETED_DOWNLOADS_PATH}'..."
 
-    if cp -rf "${INCOMPLETE_PATH}"* "${COMPLETED_PATH}"; then
+    if cp -rf "${INCOMPLETE_DOWNLOADS_PATH}"* "${COMPLETED_DOWNLOADS_PATH}"; then
 
       echo "[info] Copy successful, deleting incomplete files..."
 
       # delete only subfolders and files 1 level deep in the incomplete folder
-      find "${INCOMPLETE_PATH}" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+      find "${INCOMPLETE_DOWNLOADS_PATH}" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 
       echo "[info] All incomplete files have been deleted."
 
@@ -153,10 +153,10 @@ function pre_check() {
   fi
 
   # make folder for incomplete downloads
-  mkdir -p "${INCOMPLETE_PATH}" || { echo "[error] Failed to create incomplete folder '${INCOMPLETE_PATH}', exiting..."; exit 1; }
+  mkdir -p "${INCOMPLETE_DOWNLOADS_PATH}" || { echo "[error] Failed to create incomplete folder '${INCOMPLETE_DOWNLOADS_PATH}', exiting..."; exit 1; }
 
   # make folder for completed downloads
-  mkdir -p "${COMPLETED_PATH}" || { echo "[error] Failed to create completed folder '${COMPLETED_PATH}', exiting..."; exit 1; }
+  mkdir -p "${COMPLETED_DOWNLOADS_PATH}" || { echo "[error] Failed to create completed folder '${COMPLETED_DOWNLOADS_PATH}', exiting..."; exit 1; }
 
   # set locations for ffmpeg and atomicparsley
   "${GET_IPLAYER_FILEPATH}" --profile-dir /config --prefs-add --ffmpeg="${ffmpeg_path}" --atomicparsley="${ATOMIC_PARSELY_FILEPATH}"

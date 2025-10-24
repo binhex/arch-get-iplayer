@@ -25,6 +25,8 @@ docker run -d \
     -e VIDEO_SHOWS_PID=<comma separated show pid's> \
     -e AUDIO_SHOWS_NAME=<comma separated show names> \
     -e AUDIO_SHOWS_PID=<comma separated show pid's> \
+    -e INCOMPLETE_DOWNLOADS_PATH=<path> \
+    -e COMPLETED_DOWNLOADS_PATH=<path> \
     -v <path for data files>:/data \
     -v <path for config files>:/config \
     -v /etc/localtime:/etc/localtime:ro \
@@ -52,6 +54,8 @@ docker run -d \
     -e SCHEDULE=12h \
     -e VIDEO_SHOWS_NAME="Chuggington,Mike the Knight" \
     -e VIDEO_SHOWS_PID="b01j9sth,m000ptgr" \
+    -e INCOMPLETE_DOWNLOADS_PATH=/data/get_iplayer/incomplete/ \
+    -e COMPLETED_DOWNLOADS_PATH=/data/completed/ \
     -v /apps/docker/get_iplayer/downloaded:/data \
     -v /apps/docker/get_iplayer:/config \
     -v /etc/localtime:/etc/localtime:ro \
