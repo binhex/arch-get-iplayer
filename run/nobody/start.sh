@@ -137,8 +137,6 @@ function pre_check() {
   # create globals for paths
   ATOMIC_PARSELY_FILEPATH='/usr/sbin/atomicparsley'
   GET_IPLAYER_FILEPATH='/usr/bin/get_iplayer'
-  INCOMPLETE_PATH='/data/get_iplayer/incomplete/'
-  COMPLETED_PATH='/data/completed/'
 
   # check all required tools are available
   if [[ ! -f "${ffmpeg_path}" ]]; then
